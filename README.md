@@ -21,17 +21,9 @@ Todo funciona desde la consola, sin interfaces gráficas.
 2. Ejecuta el archivo principal desde la terminal:
 
 ```bash
+
 python src/main.py
+```
 
-
-📁 Estructura del Proyecto
-
-carrito-tienda/
-├── src/
-│   └── main.py
-├── README.md
-└── .gitignore
-
-
-✍️ Autor
-Este proyecto fue creado por Gustavo Vargas.
+## ✍️ Autor
+Este proyecto fue creado por **Gustavo Vargas**.
