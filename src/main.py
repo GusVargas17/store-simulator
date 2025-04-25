@@ -32,10 +32,16 @@ def mostrar_menu():
     """)
 
 def ver_catalogo():
-    print(f'{"Código":<15} | {"Producto":<15} | {"Precio":<6}')
-    print("-" * 42)
+    encabezado = f'{"Código":<15} | {"Producto":<15} | {"Precio":<6}'
+    print(encabezado)
+    print("-" * len(encabezado))
+
     for producto in bodega:
-        print(f'Código: {producto["codigo"]:<7} | {producto["nombre"]:<15} | S/{producto["precio"]:<6}')
+        codigo = producto["codigo"]
+        nombre = producto["nombre"]
+        precio = producto["precio"]
+        linea = f'{codigo:<15} | {nombre:<15} | S/{precio:<6}'
+        print(linea)
 
 def agregar_producto_al_carrito(codigo_producto):
     for producto in bodega:
