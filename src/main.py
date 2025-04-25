@@ -16,6 +16,8 @@ bodega = [
     }
 ]
 
+carro_compras = []
+
 def mostrar_menu():
     print("""Bienvenido a la tienda virtual 🛍️
 ¿Qué deseas hacer?
@@ -35,4 +37,14 @@ def ver_catalogo():
     for producto in bodega:
         print(f'Código: {producto["codigo"]:<7} | {producto["nombre"]:<15} | S/{producto["precio"]:<6}')
 
+def agregar_producto_al_carrito(codigo_producto):
+    for producto in bodega:
+        if codigo_producto == producto["codigo"]:
+            carro_compras.append(producto)
+            print(f"Se agregó el producto: {producto["nombre"]} al carro de compras")
+            return
+    print(f"El código: {codigo_producto} es inválido, ingrese otro código")
+
+mostrar_menu()
 ver_catalogo()
+agregar_producto_al_carrito("A002")
