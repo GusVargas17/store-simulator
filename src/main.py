@@ -75,6 +75,31 @@ def agregar_producto_al_carrito(codigo_producto):
             return
     print(f"El código: {codigo_producto} es inválido, ingrese otro código")
 
+def ver_carrito():
+    if not carro_compras:
+        print("Tu carrito está vacío 🛒. ¡Agrega productos para comenzar tu compra!")
+        return
+    encabezado = f'{"Producto":<13} | {"Cantidad":<10} | {"Precio":<9} | {"Subtotal":<10}'
+    print(encabezado)
+    print("-" * len(encabezado))
+
+    total = 0
+
+    for articulo in carro_compras:
+        producto = articulo["nombre"]
+        cantidad = articulo["cantidad"]
+        precio = articulo["precio"]
+        subtotal = cantidad * precio
+        total += subtotal
+        linea = f'{producto:<13} | {str(cantidad):^10} | S/{precio:<7.2f} | S/{subtotal:<8.2f}'
+        print(linea)
+    print("-" * len(encabezado))
+    print(f"total a pagar: S/{total:.2f}")
+
 #mostrar_menu()
-ver_catalogo()
+#ver_catalogo()
 #agregar_producto_al_carrito("A002")
+#carro_compras.clear()
+#carro_compras.append({"codigo": "A001", "nombre": "Pan", "precio": 1.5, "cantidad": 2})
+#carro_compras.append({"codigo": "C001", "nombre": "Chocolate", "precio": 1.8, "cantidad": 3})
+#ver_carrito()
