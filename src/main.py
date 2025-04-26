@@ -154,6 +154,32 @@ def vaciar_carrito():
     carro_compras.clear()
     print("Se ha vaciado el carrito correctamente")
 
+def finalizar_compra():
+    if not carro_compras:
+        print("No tienes productos en tu carrito")
+        return
+
+    total = 0
+
+    print("\nResumen de compra 🧾")
+    print("-" * 30)
+
+    for articulo in carro_compras:
+        producto = articulo["nombre"]
+        cantidad = articulo["cantidad"]
+        precio = articulo["precio"]
+        subtotal = round(cantidad * precio, 2)
+        total += subtotal
+
+        print(f"{producto} x{cantidad} -> S/{subtotal:.2f}")
+
+    print("-" * 30)
+    print(f"Total a pagar: S/{total:.2f}")
+    print("\nProcesando pago... ✅")
+    print("¡Gracias por su compra! 🛍️")
+
+    carro_compras.clear()
+
 #mostrar_menu()
 #ver_catalogo()
 #agregar_producto_al_carrito("A002")    
@@ -164,3 +190,4 @@ def vaciar_carrito():
 #ver_carrito()
 #vaciar_carrito()
 #ver_carrito()
+#finalizar_compra()
