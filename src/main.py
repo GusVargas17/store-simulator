@@ -1,4 +1,6 @@
-bodega = [
+from typing import List, Dict, Optional
+
+bodega: List[Dict[str, str | float | int]] = [
     {
         "codigo": "A001",
         "nombre": "Pan",
@@ -19,15 +21,15 @@ bodega = [
     }
 ]
 
-carro_compras = []
+carro_compras: List[Dict[str, str | float | int]] = []
 
-def buscar_producto_en_bodega(codigo):
+def buscar_producto_en_bodega(codigo: str) -> Optional[Dict[str, str | float | int]]:
     for producto in bodega:
         if producto["codigo"] == codigo:
             return producto
     return None
 
-def mostrar_menu():
+def mostrar_menu() -> None:
     print("""Bienvenido a la tienda virtual 🛍️
 ¿Qué deseas hacer?
 
@@ -40,7 +42,7 @@ def mostrar_menu():
 7. Salir
     """)
 
-def ver_catalogo():
+def ver_catalogo() -> None:
     encabezado = f'{"Código":<10} | {"Producto":<15} | {"Precio":<8} | {"stock":<6}'
     print(encabezado)
     print("-" * len(encabezado))
@@ -53,7 +55,7 @@ def ver_catalogo():
         linea = f'{codigo:<10} | {nombre:<15} | S/{precio:<6} | {stock:<6}'
         print(linea)
 
-def agregar_producto_al_carrito(codigo_producto):
+def agregar_producto_al_carrito(codigo_producto: str) -> None:
     producto = buscar_producto_en_bodega(codigo_producto)
 
     if not producto:
@@ -82,7 +84,7 @@ def agregar_producto_al_carrito(codigo_producto):
     producto["stock"] -= cantidad
     print(f'Se agregó el producto: {producto["nombre"]} al carro de compras')
 
-def ver_carrito():
+def ver_carrito() -> None:
     if not carro_compras:
         print("Tu carrito está vacío 🛒. ¡Agrega productos para comenzar tu compra!")
         return
@@ -105,7 +107,7 @@ def ver_carrito():
     print("-" * len(encabezado))
     print(f"total a pagar: S/{total:.2f}")
 
-def eliminar_producto_del_carrito(codigo_ingresado):
+def eliminar_producto_del_carrito(codigo_ingresado: str) -> None:
     for idx, producto in enumerate(carro_compras):
         if producto["codigo"] == codigo_ingresado:
             cantidad_ingresada = input("¿Cuántas unidades va a eliminar?: ")
@@ -141,7 +143,7 @@ def eliminar_producto_del_carrito(codigo_ingresado):
             return
     print("El producto no está en tu carrito")
 
-def vaciar_carrito():
+def vaciar_carrito() -> None: 
     if not carro_compras:
         print("Tu carrito está vacio.")
         return
@@ -154,7 +156,7 @@ def vaciar_carrito():
     carro_compras.clear()
     print("Se ha vaciado el carrito correctamente")
 
-def finalizar_compra():
+def finalizar_compra() -> None:
     if not carro_compras:
         print("No tienes productos en tu carrito")
         return
@@ -180,14 +182,43 @@ def finalizar_compra():
 
     carro_compras.clear()
 
-#mostrar_menu()
-#ver_catalogo()
-#agregar_producto_al_carrito("A002")    
-#carro_compras.clear()
-#carro_compras.append({"codigo": "A001", "nombre": "Pan", "precio": 1.5, "cantidad": 2})
-#carro_compras.append({"codigo": "C001", "nombre": "Chocolate", "precio": 1.8, "cantidad": 3})
-#eliminar_producto_del_carrito("C001")
-#ver_carrito()
-#vaciar_carrito()
-#ver_carrito()
-#finalizar_compra()
+def salir() -> None:
+    print("\nGracias por visitar nuestra tienda virtual 🛍️")
+    print("¡Hasta pronto! 👋")
+
+def pausar() -> None:
+    input("\nPresiona ENTER para continuar...")
+
+def main():
+    while True:
+        mostrar_menu()
+        opcion = input("Seleccione una opción (1-7): ")
+
+        if opcion == "1":
+            ver_catalogo()
+            pausar()
+        elif opcion == "2":
+            codigo = input("Ingrese el código del producto que desea agregar: ").upper()
+            agregar_producto_al_carrito(codigo)
+            pausar()
+        elif opcion == "3":
+            codigo = input("Ingrese el código del producto que desee eliminar: ").upper()
+            eliminar_producto_del_carrito(codigo)
+            pausar()
+        elif opcion == "4":
+            vaciar_carrito()
+            pausar()
+        elif opcion == "5":
+            ver_carrito()
+            pausar()
+        elif opcion == "6":
+            finalizar_compra()
+            pausar()
+        elif opcion == "7":
+            salir()
+            break
+        else:
+            print("Opción inválida. Porfavor ingrese un número del 1 al 7.")
+
+if __name__ == "__main__":
+    main()
