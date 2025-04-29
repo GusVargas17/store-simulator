@@ -40,7 +40,8 @@ def mostrar_menu() -> None:
 4. Vaciar carrito
 5. Mostrar carrito
 6. Finalizar compra
-7. Salir
+7. Ver historial de compras
+8. Salir
     """)
 
 def ver_catalogo() -> None:
@@ -86,7 +87,7 @@ def agregar_producto_al_carrito(codigo_producto: str) -> None:
     print(f'Se agregó el producto: {producto["nombre"]} al carro de compras')
 
 def calcular_total(carrito: List[Dict[str, str | float | int]]) -> float:
-    return round(sum(item["cantidad"] * item["precio"] for item in carrito))
+    return round(sum(item["cantidad"] * item["precio"] for item in carrito), 2)
 
 def ver_carrito() -> None:
     if not carro_compras:
@@ -189,7 +190,7 @@ def guardar_historial(carrito: List[Dict[str, str | float | int]]) -> None:
     fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open("historial.txt", "a", encoding="utf-8") as archivo:
         archivo.write(f"\nFecha: {fecha}\n")
-        archivo.write("compra:\n")
+        archivo.write("Compra:\n")
         for producto in carrito:
             nombre = producto["nombre"]
             cantidad = producto["cantidad"]
@@ -201,6 +202,18 @@ def guardar_historial(carrito: List[Dict[str, str | float | int]]) -> None:
         archivo.write(f"Total: S/{total:.2f}\n")
         archivo.write("-" * 30 + "\n")
 
+def ver_historial() -> None:
+    try:
+        with open("historial.txt", "r", encoding="utf-8") as archivo:
+            contenido = archivo.read()
+            if contenido.strip():
+                print("\nHistorial de compras:")
+                print(contenido)
+            else:
+                print("\nNo hay historial de compras aún.")
+    except FileNotFoundError:
+        print("\nEl historial no existe aún. Primero realiza una compra.")
+
 def salir() -> None:
     print("\nGracias por visitar nuestra tienda virtual 🛍️")
     print("¡Hasta pronto! 👋")
@@ -211,7 +224,7 @@ def pausar() -> None:
 def main():
     while True:
         mostrar_menu()
-        opcion = input("Seleccione una opción (1-7): ")
+        opcion = input("Seleccione una opción (1-8): ")
 
         if opcion == "1":
             ver_catalogo()
@@ -234,10 +247,13 @@ def main():
             finalizar_compra()
             pausar()
         elif opcion == "7":
+            ver_historial()
+            pausar()
+        elif opcion == "8":
             salir()
             break
         else:
-            print("Opción inválida. Por favor ingrese un número del 1 al 7.")
+            print("Opción inválida. Por favor ingrese un número del 1 al 8.")
             pausar()
 
 if __name__ == "__main__":
