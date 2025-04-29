@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Dict, Optional
 
 bodega: List[Dict[str, str | float | int]] = [
@@ -63,7 +64,7 @@ def agregar_producto_al_carrito(codigo_producto: str) -> None:
         return
     cantidad_ingresada = input(f"¿Cúantos unidades de {producto['nombre']} desea agregar? (Stock disponible: {producto['stock']}): ")
     if not cantidad_ingresada.isdigit():
-        print("Ingrese un número válido porfavor.")
+        print("Ingrese un número válido por favor.")
         return
 
     cantidad = int(cantidad_ingresada)
@@ -84,6 +85,9 @@ def agregar_producto_al_carrito(codigo_producto: str) -> None:
     producto["stock"] -= cantidad
     print(f'Se agregó el producto: {producto["nombre"]} al carro de compras')
 
+def calcular_total(carrito: List[Dict[str, str | float | int]]) -> float:
+    return round(sum(item["cantidad"] * item["precio"] for item in carrito))
+
 def ver_carrito() -> None:
     if not carro_compras:
         print("Tu carrito está vacío 🛒. ¡Agrega productos para comenzar tu compra!")
@@ -93,18 +97,16 @@ def ver_carrito() -> None:
     print(encabezado)
     print("-" * len(encabezado))
 
-    total = 0
-
     for articulo in carro_compras:
         producto = articulo["nombre"]
         cantidad = articulo["cantidad"]
         precio = articulo["precio"]
         subtotal = round(cantidad * precio, 2)
-        total += subtotal
         linea = f'{producto:<13} | {str(cantidad):^10} | S/{precio:<7.2f} | S/{subtotal:<8.2f}'
         print(linea)
 
     print("-" * len(encabezado))
+    total = calcular_total(carro_compras)
     print(f"total a pagar: S/{total:.2f}")
 
 def eliminar_producto_del_carrito(codigo_ingresado: str) -> None:
@@ -161,8 +163,6 @@ def finalizar_compra() -> None:
         print("No tienes productos en tu carrito")
         return
 
-    total = 0
-
     print("\nResumen de compra 🧾")
     print("-" * 30)
 
@@ -171,16 +171,35 @@ def finalizar_compra() -> None:
         cantidad = articulo["cantidad"]
         precio = articulo["precio"]
         subtotal = round(cantidad * precio, 2)
-        total += subtotal
-
         print(f"{producto} x{cantidad} -> S/{subtotal:.2f}")
 
+    total = calcular_total(carro_compras)
     print("-" * 30)
     print(f"Total a pagar: S/{total:.2f}")
     print("\nProcesando pago... ✅")
     print("¡Gracias por su compra! 🛍️")
 
+    guardar_historial(carro_compras)
     carro_compras.clear()
+
+def guardar_historial(carrito: List[Dict[str, str | float | int]]) -> None:
+    if not carrito:
+        return
+    
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("historial.txt", "a", encoding="utf-8") as archivo:
+        archivo.write(f"\nFecha: {fecha}\n")
+        archivo.write("compra:\n")
+        for producto in carrito:
+            nombre = producto["nombre"]
+            cantidad = producto["cantidad"]
+            precio = producto["precio"]
+            subtotal = cantidad * precio
+            archivo.write(f"- {nombre} x{cantidad} -> S/{subtotal:.2f}\n")
+
+        total = calcular_total(carrito)
+        archivo.write(f"Total: S/{total:.2f}\n")
+        archivo.write("-" * 30 + "\n")
 
 def salir() -> None:
     print("\nGracias por visitar nuestra tienda virtual 🛍️")
@@ -218,7 +237,8 @@ def main():
             salir()
             break
         else:
-            print("Opción inválida. Porfavor ingrese un número del 1 al 7.")
+            print("Opción inválida. Por favor ingrese un número del 1 al 7.")
+            pausar()
 
 if __name__ == "__main__":
     main()
