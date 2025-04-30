@@ -17,3 +17,6 @@ Thumbs.db
 
 # Archivos de log o pruebas
 *.log
+
+# Archivos generados automáticamente
+src/historial.txt
